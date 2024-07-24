@@ -112,6 +112,62 @@ internal partial class CurrenciesWidget
                 -5,
                 5
             ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new IntegerWidgetConfigVariable(
+                "GCSealThreshold",
+                "Grand Company Seal Threshold",
+                "**Changing this value requires an Umbra Restart** Set a threshold warning for Grand Company seals. The text will highlight orange above this value.",
+                75000,
+                0,
+                90000
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new IntegerWidgetConfigVariable(
+                "HuntThreshold",
+                "The Hunt Threshold",
+                "**Changing this value requires an Umbra Restart** Set a threshold warning for The Hunt currencies. The text will highlight orange above this value.",
+                3000,
+                0,
+                4000
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new IntegerWidgetConfigVariable(
+                "TomeThreshold",
+                "Tomestone Threshold",
+                "**Changing this value requires an Umbra Restart** Set a threshold warning for your Tomestones. The text will highlight orange above this value.",
+                1500,
+                0,
+                2000
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new IntegerWidgetConfigVariable(
+                "PvPThreshold",
+                "PvP Threshold",
+                "**Changing this value requires an Umbra Restart** Set a threshold warning for your PvP currencies. The text will highlight orange above this value.",
+                15000,
+                0,
+                20000
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new IntegerWidgetConfigVariable(
+                "CraftGatherThreshold",
+                "Crafter / Gather Threshold",
+                "**Changing this value requires an Umbra Restart** Set a threshold warning for your Crafter / Gatherer scrips. The text will highlight orange above this value.",
+                3000,
+                0,
+                4000
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new IntegerWidgetConfigVariable(
+                "SkybuilderThreshold",
+                "Skybuilder Scrips Threshold",
+                "**Changing this value requires an Umbra Restart** Set a threshold warning for your Skybuilder scrips. The text will highlight orange above this value.",
+                15000,
+                0,
+                20000
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new IntegerWidgetConfigVariable(
+                "BicolorThreshold",
+                "Bicolor Gems Threshold",
+                "**Changing this value requires an Umbra Restart** Set a threshold warning for your Bicolor Gems. The text will highlight orange above this value.",
+                1200,
+                0,
+                1500
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
             new BooleanWidgetConfigVariable(
                 "DesaturateIcons",
                 I18N.Translate("Widget.Currencies.Config.DesaturateIcons.Name"),
