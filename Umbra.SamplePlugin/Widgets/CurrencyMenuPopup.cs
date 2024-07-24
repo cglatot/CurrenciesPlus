@@ -205,6 +205,29 @@ public class CurrencyMenuPopup : WidgetPopup
     }
 
     /// <summary>
+    /// Sets the color text of a button with the specified ID.
+    /// </summary>
+    /// <param name="id">The ID of the button.</param>
+    /// <param name="color">The alternative text to show on the button.</param>
+    public void SetNewColor(string id, Color? newColor)
+    {
+        Node? node = Node.QuerySelector($"{id}.button > .button--altText");
+        Node? labelNode = Node.QuerySelector($"{id}.button > .button--label");
+
+        if (node is null) {
+            Logger.Warning($"Attempted to set color for non-existent button altext: {id}");
+            return;
+        }
+        if (labelNode is null) {
+            Logger.Warning($"Attempted to set color for non-existent button label: {id}");
+            return;
+        }
+
+        node.Style.Color = newColor;
+        labelNode.Style.Color = newColor;
+    }
+
+    /// <summary>
     /// Sets the icon of a button with the specified ID.
     /// </summary>
     /// <param name="id">The ID of the button.</param>
