@@ -2,6 +2,9 @@
 
 Modified Currency widget, with a configurable warning threshold that turns the text orange when above it. Text turns red when currency is capped.
 
+![image](https://github.com/user-attachments/assets/d9111e08-2c4b-4922-b931-1b4c6056981b)
+
+
 ## Installation
 
 The plugin can be installed by selecting the .dll file from [Releases](https://github.com/cglatot/CurrencyThreshold/releases/latest) in Umbra's "Add Plugin" settings. The widget is named "Currencies Threshold" and must then be added to a column in your Toolbar Widgets settings.
