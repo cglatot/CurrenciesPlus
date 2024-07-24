@@ -45,35 +45,35 @@
 
     <ItemGroup>
         <Reference Include="Umbra">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Umbra.dll</HintPath>
+            <HintPath>$(UmbraLibPath)Umbra.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Umbra.Common">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Umbra.Common.dll</HintPath>
+            <HintPath>$(UmbraLibPath)Umbra.Common.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Umbra.Game">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Umbra.Game.dll</HintPath>
+            <HintPath>$(UmbraLibPath)Umbra.Game.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Una.Drawing">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Una.Drawing.dll</HintPath>
+            <HintPath>$(UmbraLibPath)Una.Drawing.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Dalamud">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
+            <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="FFXIVClientStructs">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
+            <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Lumina">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Lumina.dll</HintPath>
+            <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Lumina.Excel">
-            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Lumina.Excel.dll</HintPath>
+            <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
             <Private>false</Private>
         </Reference>
     </ItemGroup>
