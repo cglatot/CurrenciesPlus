@@ -126,6 +126,12 @@ internal partial class CurrenciesWidget
                 "0xFF6565FC",
                 10
             ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new BooleanWidgetConfigVariable(
+                "ApplyToWidgetText",
+                "Apply Colours to Widget Text",
+                "Check this to also apply the colours to the widget text in the toolbar. Uncheck to only colourise the text in the popup menu.",
+                true
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
             new IntegerWidgetConfigVariable(
                 "GCSealThreshold",
                 "Grand Company Seal Threshold",
