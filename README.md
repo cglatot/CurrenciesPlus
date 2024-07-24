@@ -13,6 +13,8 @@ The plugin can be installed by selecting the .dll file from [Releases](https://g
 
 Code is provided as-is and, unless it's broken, I likely won't be changing anything here. This was primarily created to suit my personal tastes, and thought that others might like it as well.
 
+The extra config settings are also hardcoded in English. If anyone wants to implement multi language support, I'll be happy to accept a PR. But I will not be adding other languages myself.
+
 Do not, under any circumstances, bother Una about issues with this widget. Although the code was copied from the existing Currencies widget, the threshold modifications are entirely mine. It also means that any subsequent additions to the main Currencies widget may not be replicated in this plugin.
 
 I will accept PRs for updates that have been tested, or for adding any updates from the main Currencies plugin. Otherwise, I will likely not be updating this plugin.

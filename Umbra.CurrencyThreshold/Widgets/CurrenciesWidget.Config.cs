@@ -112,6 +112,20 @@ internal partial class CurrenciesWidget
                 -5,
                 5
             ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new StringWidgetConfigVariable(
+                "ThresholdColor",
+                "Threshold Colour",
+                "Choose the color you want the text to be beyond the threshold limits. This must be given in the format 0xaaBBGGRR. Default is 0xFF52ABFF",
+                "0xFF52ABFF",
+                10
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new StringWidgetConfigVariable(
+                "ThresholdMaxColor",
+                "Capped Colour",
+                "Choose the color you want the text to be when capped. This must be given in the format 0xaaBBGGRR. Default is 0xFF6565FC",
+                "0xFF6565FC",
+                10
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
             new IntegerWidgetConfigVariable(
                 "GCSealThreshold",
                 "Grand Company Seal Threshold",

@@ -14,6 +14,7 @@
  *     GNU Affero General Public License for more details.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -46,6 +47,9 @@ internal partial class CurrenciesWidget
 
         byte gcId = Player.GrandCompanyId;
 
+        Una.Drawing.Color cappedColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
+        Una.Drawing.Color thresholdColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdColor"), 16));
+
         foreach (Currency currency in group0Currencies) {
             if (currency.Type == CurrencyType.Maelstrom && gcId != 1) continue;
             if (currency.Type == CurrencyType.TwinAdder && gcId != 2) continue;
@@ -56,9 +60,10 @@ internal partial class CurrenciesWidget
 
             Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
             if (currency.Type == CurrencyType.Maelstrom || currency.Type == CurrencyType.TwinAdder || currency.Type == CurrencyType.ImmortalFlames) {
-                if (GetActualAmount(currency.Type) >= 90000) setTextColor = new(0xFF6565fc);
-                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("GCSealThreshold")) setTextColor = new(0xFF52ABFF);
+                if (GetActualAmount(currency.Type) >= 90000) setTextColor = cappedColor;
+                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("GCSealThreshold")) setTextColor = thresholdColor;
             }
+
 
             Popup.AddButton(
                 $"Currency_{currency.Id}",
@@ -89,30 +94,30 @@ internal partial class CurrenciesWidget
 
             Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
             if (currency.GroupId == 1) {
-                if (GetActualAmount(currency.Type) >= 4000) setTextColor = new(0xFF6565fc);
-                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("HuntThreshold")) setTextColor = new(0xFF52ABFF);
+                if (GetActualAmount(currency.Type) >= 4000) setTextColor = cappedColor;
+                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("HuntThreshold")) setTextColor = thresholdColor;
             }
             else if (currency.GroupId == 2) {
-                if (GetActualAmount(currency.Type) >= 2000) setTextColor = new(0xFF6565fc);
-                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("TomeThreshold")) setTextColor = new(0xFF52ABFF);
+                if (GetActualAmount(currency.Type) >= 2000) setTextColor = cappedColor;
+                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("TomeThreshold")) setTextColor = thresholdColor;
             }
             else if (currency.GroupId == 3) {
-                if (GetActualAmount(currency.Type) >= 20000) setTextColor = new(0xFF6565fc);
-                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("PvPThreshold")) setTextColor = new(0xFF52ABFF);
+                if (GetActualAmount(currency.Type) >= 20000) setTextColor = cappedColor;
+                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("PvPThreshold")) setTextColor = thresholdColor;
             }
             else if (currency.GroupId == 4) {
                 if (currency.Type == CurrencyType.SkyBuildersScrips) {
-                    if (GetActualAmount(currency.Type) >= 20000) setTextColor = new(0xFF6565fc);
-                    else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("SkybuilderThreshold")) setTextColor = new(0xFF52ABFF);
+                    if (GetActualAmount(currency.Type) >= 20000) setTextColor = cappedColor;
+                    else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("SkybuilderThreshold")) setTextColor = thresholdColor;
                 }
                 else {
-                    if (GetActualAmount(currency.Type) >= 4000) setTextColor = new(0xFF6565fc);
-                    else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("CraftGatherThreshold")) setTextColor = new(0xFF52ABFF);
+                    if (GetActualAmount(currency.Type) >= 4000) setTextColor = cappedColor;
+                    else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("CraftGatherThreshold")) setTextColor = thresholdColor;
                 }
             }
             else if (currency.GroupId == 5) {
-                if (GetActualAmount(currency.Type) >= 1500) setTextColor = new(0xFF6565fc);
-                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("BicolorThreshold")) setTextColor = new(0xFF52ABFF);
+                if (GetActualAmount(currency.Type) >= 1500) setTextColor = cappedColor;
+                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("BicolorThreshold")) setTextColor = thresholdColor;
             }
 
             Popup.AddButton(
