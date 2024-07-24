@@ -33,47 +33,47 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Authors>Your Name</Authors>
-        <Company>Sample Company</Company>
+        <Authors>cglatot</Authors>
+        <Company>NullCorp</Company>
         <Version>1.0.0.0</Version>
-        <Description>A description</Description>
+        <Description>Currency widget with Threshold Setting</Description>
         <Copyright>(C)2024</Copyright>
-        <PackageProjectUrl>https://github.com/una-xiv/umbra</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/cglatot/CurrencyThreshold</PackageProjectUrl>
         <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
         <Reference Include="Umbra">
-            <HintPath>$(UmbraLibPath)Umbra.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Umbra.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Umbra.Common">
-            <HintPath>$(UmbraLibPath)Umbra.Common.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Umbra.Common.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Umbra.Game">
-            <HintPath>$(UmbraLibPath)Umbra.Game.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Umbra.Game.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Una.Drawing">
-            <HintPath>$(UmbraLibPath)Una.Drawing.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\installedPlugins\Umbra\2.1.5.0\Una.Drawing.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Dalamud">
-            <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="FFXIVClientStructs">
-            <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Lumina">
-            <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Lumina.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="Lumina.Excel">
-            <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
+            <HintPath>C:\Users\Ciaran\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Lumina.Excel.dll</HintPath>
             <Private>false</Private>
         </Reference>
     </ItemGroup>
