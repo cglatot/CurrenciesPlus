@@ -141,6 +141,9 @@ internal sealed partial class CurrenciesWidget(
         if (GetConfigValue<bool>("ApplyToWidgetText")) {
             Una.Drawing.Color cappedColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
             Una.Drawing.Color thresholdColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdColor"), 16));
+            Una.Drawing.Color weeklyCappedColor = new(Convert.ToUInt32(GetConfigValue<string>("WeeklyCappedColor"), 16));
+
+            bool enableWeeklyColor = GetConfigValue<bool>("EnableWeeklyCapColor");
 
             if (currency.Type == CurrencyType.Maelstrom || currency.Type == CurrencyType.TwinAdder || currency.Type == CurrencyType.ImmortalFlames) {
                 if (GetActualAmount(currency.Type) >= 90000) setTextColor = cappedColor;
@@ -151,8 +154,15 @@ internal sealed partial class CurrenciesWidget(
                 else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("HuntThreshold")) setTextColor = thresholdColor;
             }
             else if (currency.GroupId == 2) {
+                if (GetActualAmount(currency.Type) >= GetConfigValue<int>("TomeThreshold")) setTextColor = thresholdColor;
+                if (currency.Type == CurrencyType.LimitedTomestone && enableWeeklyColor) {
+                    int weeklyLimit = GetLimitedCap();
+                    int weeklyCount = GetLimitedCurrent();
+                    if (weeklyCount == weeklyLimit) {
+                        setTextColor = weeklyCappedColor;
+                    }
+                }
                 if (GetActualAmount(currency.Type) >= 2000) setTextColor = cappedColor;
-                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("TomeThreshold")) setTextColor = thresholdColor;
             }
             else if (currency.GroupId == 3) {
                 if (GetActualAmount(currency.Type) >= 20000) setTextColor = cappedColor;
@@ -195,8 +205,6 @@ internal sealed partial class CurrenciesWidget(
             return;
         }
 
-        // var trackedCurrencyId = GetConfigValue<string>("TrackedCurrency");
-
         foreach (var currency in Currencies.Values) {
             if (currency.Type == CurrencyType.Maelstrom && gcId != 1) continue;
             if (currency.Type == CurrencyType.TwinAdder && gcId != 2) continue;
@@ -204,12 +212,10 @@ internal sealed partial class CurrenciesWidget(
 
             Una.Drawing.Color cappedColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
             Una.Drawing.Color thresholdColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdColor"), 16));
+            Una.Drawing.Color weeklyCappedColor = new(Convert.ToUInt32(GetConfigValue<string>("WeeklyCappedColor"), 16));
             Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
 
-            // var isTracked = false;
-            // if (Enum.TryParse(trackedCurrencyId, out CurrencyType currencyType) && currencyType == currency.Type) {
-            //     isTracked = true;
-            // }
+            bool enableWeeklyColor = GetConfigValue<bool>("EnableWeeklyCapColor");
             
             if (currency.Type == CurrencyType.Maelstrom || currency.Type == CurrencyType.TwinAdder || currency.Type == CurrencyType.ImmortalFlames) {
                 if (GetActualAmount(currency.Type) >= 90000) setTextColor = cappedColor;
@@ -220,8 +226,15 @@ internal sealed partial class CurrenciesWidget(
                 else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("HuntThreshold")) setTextColor = thresholdColor;
             }
             else if (currency.GroupId == 2) {
+                if (GetActualAmount(currency.Type) >= GetConfigValue<int>("TomeThreshold")) setTextColor = thresholdColor;
+                if (currency.Type == CurrencyType.LimitedTomestone && enableWeeklyColor) {
+                    int weeklyLimit = GetLimitedCap();
+                    int weeklyCount = GetLimitedCurrent();
+                    if (weeklyCount == weeklyLimit) {
+                        setTextColor = weeklyCappedColor;
+                    }
+                }
                 if (GetActualAmount(currency.Type) >= 2000) setTextColor = cappedColor;
-                else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("TomeThreshold")) setTextColor = thresholdColor;
             }
             else if (currency.GroupId == 3) {
                 if (GetActualAmount(currency.Type) >= 20000) setTextColor = cappedColor;
@@ -241,8 +254,6 @@ internal sealed partial class CurrenciesWidget(
                 if (GetActualAmount(currency.Type) >= 1500) setTextColor = cappedColor;
                 else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("BicolorThreshold")) setTextColor = thresholdColor;
             }
-
-            // if (isTracked) Node.QuerySelector("#Label")!.Style.Color = setTextColor;
 
             Popup.SetButtonAltLabel($"Currency_{currency.Id}", GetAmount(currency.Type));
             Popup.SetNewColor($"Currency_{currency.Id}", setTextColor);

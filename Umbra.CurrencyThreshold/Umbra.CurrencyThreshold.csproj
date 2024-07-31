@@ -35,7 +35,7 @@
     <PropertyGroup>
         <Authors>cglatot</Authors>
         <Company>NullCorp</Company>
-        <Version>1.0.3</Version>
+        <Version>1.1.0</Version>
         <Description>Currency widget with Threshold Setting</Description>
         <Copyright>(C)2024</Copyright>
         <PackageProjectUrl>https://github.com/cglatot/CurrencyThreshold</PackageProjectUrl>

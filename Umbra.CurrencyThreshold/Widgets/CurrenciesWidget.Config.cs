@@ -89,6 +89,12 @@ internal partial class CurrenciesWidget
                 true
             ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
             new BooleanWidgetConfigVariable(
+                "ShowWeeklyProgress",
+                "Show Limited Tomestone Weekly Progress",
+                "This cannot be used at the same time as the option above. This will only show your current progress in the weekly tomes. Once you reach the weekly cap, this will be hidden.",
+                true
+            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            new BooleanWidgetConfigVariable(
                 "DesaturateIcon",
                 I18N.Translate("Widget.Currencies.Config.DesaturateIcon.Name"),
                 I18N.Translate("Widget.Currencies.Config.DesaturateIcon.Description"),
@@ -118,20 +124,33 @@ internal partial class CurrenciesWidget
                 "Choose the color you want the text to be beyond the threshold limits. This must be given in the format 0xaaBBGGRR. Default is 0xFF52ABFF",
                 "0xFF52ABFF",
                 10
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new StringWidgetConfigVariable(
                 "ThresholdMaxColor",
                 "Capped Colour",
                 "Choose the color you want the text to be when capped. This must be given in the format 0xaaBBGGRR. Default is 0xFF6565FC",
                 "0xFF6565FC",
                 10
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
+            new StringWidgetConfigVariable(
+                "WeeklyCappedColor",
+                "Weekly Tomestone Capped Colour",
+                "Choose the color you want the text to be when you have capped the weekly limit. You also need to check . This must be given in the format 0xaaBBGGRR. Default is 0xFF79E4EA",
+                "0xFF79E4EA",
+                10
+            ) { Category = "Threshold Settings" },
+            new BooleanWidgetConfigVariable(
+                "EnableWeeklyCapColor",
+                "Enable the Weekly Cap Colour",
+                "Check this to enable the Weekly Tomestome Cap colour, as set above.",
+                true
+            ) { Category = "Threshold Settings" },
             new BooleanWidgetConfigVariable(
                 "ApplyToWidgetText",
-                "Apply Colours to Widget Text",
+                "Also Apply Colours to Toolbar Text",
                 "Check this to also apply the colours to the widget text in the toolbar. Uncheck to only colourise the text in the popup menu.",
                 true
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
                 "GCSealThreshold",
                 "Grand Company Seal Threshold",
@@ -139,7 +158,7 @@ internal partial class CurrenciesWidget
                 75000,
                 0,
                 90000
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
                 "HuntThreshold",
                 "The Hunt Threshold",
@@ -147,7 +166,7 @@ internal partial class CurrenciesWidget
                 3000,
                 0,
                 4000
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
                 "TomeThreshold",
                 "Tomestone Threshold",
@@ -155,7 +174,7 @@ internal partial class CurrenciesWidget
                 1500,
                 0,
                 2000
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
                 "PvPThreshold",
                 "PvP Threshold",
@@ -163,7 +182,7 @@ internal partial class CurrenciesWidget
                 15000,
                 0,
                 20000
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
                 "CraftGatherThreshold",
                 "Crafter / Gather Threshold",
@@ -171,7 +190,7 @@ internal partial class CurrenciesWidget
                 3000,
                 0,
                 4000
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
                 "SkybuilderThreshold",
                 "Skybuilder Scrips Threshold",
@@ -179,7 +198,7 @@ internal partial class CurrenciesWidget
                 15000,
                 0,
                 20000
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
                 "BicolorThreshold",
                 "Bicolor Gems Threshold",
@@ -187,7 +206,7 @@ internal partial class CurrenciesWidget
                 1200,
                 0,
                 1500
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings"},
             new BooleanWidgetConfigVariable(
                 "DesaturateIcons",
                 I18N.Translate("Widget.Currencies.Config.DesaturateIcons.Name"),

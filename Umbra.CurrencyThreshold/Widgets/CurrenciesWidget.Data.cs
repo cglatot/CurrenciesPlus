@@ -113,6 +113,7 @@ internal partial class CurrenciesWidget
     private unsafe string GetAmount(CurrencyType type)
     {
         var showCap = GetConfigValue<bool>("ShowCap");
+        var showWeeklyProgress = GetConfigValue<bool>("ShowWeeklyProgress");
 
         switch (type) {
             case CurrencyType.Gil:
@@ -136,7 +137,9 @@ internal partial class CurrenciesWidget
                 int weeklyLimit = InventoryManager.GetLimitedTomestoneWeeklyLimit();
                 int weeklyCount = InventoryManager.Instance()->GetWeeklyAcquiredTomestoneCount();
 
-                return showCap ? $"{amt} / {cap} ({weeklyCount} / {weeklyLimit})" : $"{amt}";
+                if (showCap) return $"{amt} / {cap} ({weeklyCount} / {weeklyLimit})";
+                else if (showWeeklyProgress && weeklyCount < weeklyLimit) return $"{amt} ({weeklyCount})";
+                else return showCap ? $"{amt} / {cap} ({weeklyCount} / {weeklyLimit})" : $"{amt}";
             }
             default: {
                 uint cap = Currencies[type].Cap;
@@ -149,8 +152,6 @@ internal partial class CurrenciesWidget
 
     private unsafe int GetActualAmount(CurrencyType type)
     {
-        var showCap = GetConfigValue<bool>("ShowCap");
-
         switch (type) {
             case CurrencyType.Gil:
             case CurrencyType.Mgp:
@@ -160,28 +161,30 @@ internal partial class CurrenciesWidget
             case CurrencyType.TwinAdder:
             case CurrencyType.ImmortalFlames: {
                 if (Player.GrandCompanyId == 0) return 0;
-
-                string cap = FormatNumber(GcSealsCap[PlayerState.Instance()->GetGrandCompanyRank()]);
                 int amt = Player.GetItemCount(Currencies[type].Id);
-
                 return amt;
             }
             case CurrencyType.LimitedTomestone: {
-                string cap = FormatNumber((int)Currencies[type].Cap);
                 int amt = Player.GetItemCount(Currencies[type].Id);
-
-                int weeklyLimit = InventoryManager.GetLimitedTomestoneWeeklyLimit();
-                int weeklyCount = InventoryManager.Instance()->GetWeeklyAcquiredTomestoneCount();
-
                 return amt;
             }
             default: {
-                uint cap = Currencies[type].Cap;
                 int  amt = Player.GetItemCount(Currencies[type].Id);
-
                 return amt;
             }
         }
+    }
+
+    private unsafe int GetLimitedCap()
+    {
+        int weeklyLimit = InventoryManager.GetLimitedTomestoneWeeklyLimit();
+        return weeklyLimit;
+    }
+
+    private unsafe int GetLimitedCurrent()
+    {
+        int weeklyCount = InventoryManager.Instance()->GetWeeklyAcquiredTomestoneCount();
+        return weeklyCount;
     }
 
     /// <summary>
