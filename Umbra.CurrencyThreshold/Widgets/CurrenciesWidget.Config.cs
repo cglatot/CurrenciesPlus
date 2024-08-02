@@ -57,24 +57,12 @@ internal partial class CurrenciesWidget
                 I18N.Translate("Widget.Currencies.Config.EnableMouseInteraction.Description"),
                 true
             ),
-            new BooleanWidgetConfigVariable(
-                "Decorate",
-                I18N.Translate("Widget.Currencies.Config.Decorate.Name"),
-                I18N.Translate("Widget.Currencies.Config.Decorate.Description"),
-                true
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
             new StringWidgetConfigVariable(
                 "CustomLabel",
                 I18N.Translate("Widget.Currencies.Config.CustomWidgetLabel.Name"),
                 I18N.Translate("Widget.Currencies.Config.CustomWidgetLabel.Description"),
                 "",
                 32
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
-            new BooleanWidgetConfigVariable(
-                "ShowIcon",
-                I18N.Translate("Widget.Currencies.Config.ShowIcon.Name"),
-                I18N.Translate("Widget.Currencies.Config.ShowIcon.Description"),
-                true
             ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
             new BooleanWidgetConfigVariable(
                 "ShowName",
@@ -88,36 +76,14 @@ internal partial class CurrenciesWidget
                 I18N.Translate("Widget.Currencies.Config.ShowCap.Description"),
                 true
             ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ..DefaultToolbarWidgetConfigVariables,
+            ..SingleLabelTextOffsetVariables,
             new BooleanWidgetConfigVariable(
-                "ShowWeeklyProgress",
-                "Show Limited Tomestone Weekly Progress",
-                "This cannot be used at the same time as the option above. This will only show your current progress in the weekly tomes. Once you reach the weekly cap, this will be hidden.",
+                "ApplyToWidgetText",
+                "Also Apply Colours to Toolbar Text",
+                "Check this to also apply the colours to the widget text in the toolbar. Uncheck to only colourise the text in the popup menu.",
                 true
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
-            new BooleanWidgetConfigVariable(
-                "DesaturateIcon",
-                I18N.Translate("Widget.Currencies.Config.DesaturateIcon.Name"),
-                I18N.Translate("Widget.Currencies.Config.DesaturateIcon.Description"),
-                true
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
-            new SelectWidgetConfigVariable(
-                "IconLocation",
-                I18N.Translate("Widget.Currencies.Config.IconLocation.Name"),
-                I18N.Translate("Widget.Currencies.Config.IconLocation.Description"),
-                "Left",
-                new() {
-                    { "Left", I18N.Translate("Widget.Currencies.Config.IconLocation.Option.Left") },
-                    { "Right", I18N.Translate("Widget.Currencies.Config.IconLocation.Option.Right") }
-                }
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
-            new IntegerWidgetConfigVariable(
-                "TextYOffset",
-                I18N.Translate("Widget.Currencies.Config.TextYOffset.Name"),
-                I18N.Translate("Widget.Currencies.Config.TextYOffset.Description"),
-                0,
-                -5,
-                5
-            ) { Category = I18N.Translate("Widget.ConfigCategory.WidgetAppearance") },
+            ) { Category = "Threshold Settings" },
             new StringWidgetConfigVariable(
                 "ThresholdColor",
                 "Threshold Colour",
@@ -132,6 +98,12 @@ internal partial class CurrenciesWidget
                 "0xFF6565FC",
                 10
             ) { Category = "Threshold Settings" },
+            new BooleanWidgetConfigVariable(
+                "ShowWeeklyProgress",
+                "Show Limited Tomestone Weekly Progress",
+                "This cannot be used at the same time as the option above. This will only show your current progress in the weekly tomes. Once you reach the weekly cap, this will be hidden.",
+                true
+            ) { Category = "Threshold Settings" },
             new StringWidgetConfigVariable(
                 "WeeklyCappedColor",
                 "Weekly Tomestone Capped Colour",
@@ -143,12 +115,6 @@ internal partial class CurrenciesWidget
                 "EnableWeeklyCapColor",
                 "Enable the Weekly Cap Colour",
                 "Check this to enable the Weekly Tomestome Cap colour, as set above.",
-                true
-            ) { Category = "Threshold Settings" },
-            new BooleanWidgetConfigVariable(
-                "ApplyToWidgetText",
-                "Also Apply Colours to Toolbar Text",
-                "Check this to also apply the colours to the widget text in the toolbar. Uncheck to only colourise the text in the popup menu.",
                 true
             ) { Category = "Threshold Settings" },
             new IntegerWidgetConfigVariable(
@@ -213,6 +179,20 @@ internal partial class CurrenciesWidget
                 I18N.Translate("Widget.Currencies.Config.DesaturateIcons.Description"),
                 true
             ) { Category = I18N.Translate("Widget.ConfigCategory.MenuAppearance") },
+            ..GetEnabledCurrenciesVariables()
         ];
+    }
+
+    private static List<IWidgetConfigVariable> GetEnabledCurrenciesVariables()
+    {
+        List<IWidgetConfigVariable> variables = [];
+
+        foreach (var currency in Currencies.Values) {
+            variables.Add(new BooleanWidgetConfigVariable($"EnabledCurrency_{currency.Id}", currency.Name, null, true) {
+                Category = I18N.Translate("Widget.Currencies.Config.EnabledCurrencyGroup")
+            });
+        }
+
+        return variables;
     }
 }
