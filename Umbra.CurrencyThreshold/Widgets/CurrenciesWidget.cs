@@ -16,10 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Timers;
 using FFXIVClientStructs.FFXIV.Client.UI;
-using Lumina;
 using Umbra.Common;
 
 namespace Umbra.Widgets;
@@ -33,19 +31,19 @@ internal sealed partial class CurrenciesWidget(
 {
     private readonly Timer _updateTimer           = new(1000);
     private          byte  _currentGrandCompanyId = 0;
-    private          bool? _useGrayscaleIcon;
 
     /// <inheritdoc/>
     protected override void Initialize()
     {
         SyncTrackedCurrencyOptions();
         HydratePopupMenu();
+        UpdateMenuItems(true);
 
         _updateTimer.Elapsed   += (_, _) => UpdateMenuItems();
         _updateTimer.AutoReset =  true;
         _updateTimer.Start();
 
-        Node.OnClick      += _ => UpdateMenuItems();
+        Node.OnClick      += _ => UpdateMenuItems(true);
         Node.OnRightClick += _ => OpenCurrenciesWindow();
     }
 
@@ -71,39 +69,19 @@ internal sealed partial class CurrenciesWidget(
     /// <inheritdoc/>
     protected override void OnUpdate()
     {
-        Popup.IsDisabled = !GetConfigValue<bool>("EnableMouseInteraction");
-
-        SetGhost(!GetConfigValue<bool>("Decorate"));
+        Popup.IsDisabled        = !GetConfigValue<bool>("EnableMouseInteraction");
         Popup.UseGrayscaleIcons = GetConfigValue<bool>("DesaturateIcons");
 
         UpdateCustomIdList();
 
-        Node.QuerySelector("#Label")!.Style.TextOffset = new(0, GetConfigValue<int>("TextYOffset"));
-
         var trackedCurrencyId = GetConfigValue<string>("TrackedCurrency");
-        var useGrayscaleIcon  = GetConfigValue<bool>("DesaturateIcon");
 
         if (uint.TryParse(GetConfigValue<string>("TrackedCurrency"), out uint customId)) {
             if (CustomCurrencies.TryGetValue(customId, out Currency? customCurrency)) {
-                if (GetConfigValue<string>("IconLocation") == "Left") {
-                    SetLeftIcon(GetConfigValue<bool>("ShowIcon") ? customCurrency.Icon : null);
-                    SetRightIcon(null);
-                } else {
-                    SetLeftIcon(null);
-                    SetRightIcon(GetConfigValue<bool>("ShowIcon") ? customCurrency.Icon : null);
-                }
-
-                if (_useGrayscaleIcon != useGrayscaleIcon) {
-                    _useGrayscaleIcon = useGrayscaleIcon;
-
-                    foreach (var node in Node.QuerySelectorAll(".icon")) {
-                        node.Style.ImageGrayscale = useGrayscaleIcon;
-                    }
-                }
-
                 string customName = GetConfigValue<bool>("ShowName") ? $" {customCurrency.Name}" : "";
                 SetLabel($"{GetCustomAmount(customCurrency.Id)}{customName}");
-
+                SetIcon(customCurrency.Icon);
+                base.OnUpdate();
                 return;
             }
         }
@@ -113,29 +91,16 @@ internal sealed partial class CurrenciesWidget(
             string label       = I18N.Translate("Widget.Currencies.Name");
 
             SetLabel(string.IsNullOrEmpty(customLabel) ? label : customLabel);
-            SetLeftIcon(null);
-            SetRightIcon(null);
+            SetIcon(null);
+            base.OnUpdate();
             return;
-        }
-
-        if (GetConfigValue<string>("IconLocation") == "Left") {
-            SetLeftIcon(GetConfigValue<bool>("ShowIcon") ? currency.Icon : null);
-            SetRightIcon(null);
-        } else {
-            SetLeftIcon(null);
-            SetRightIcon(GetConfigValue<bool>("ShowIcon") ? currency.Icon : null);
-        }
-
-        if (_useGrayscaleIcon != useGrayscaleIcon) {
-            _useGrayscaleIcon = useGrayscaleIcon;
-
-            foreach (var node in Node.QuerySelectorAll(".icon")) {
-                node.Style.ImageGrayscale = useGrayscaleIcon;
-            }
         }
 
         string name = GetConfigValue<bool>("ShowName") ? $" {currency.Name}" : "";
         SetLabel($"{GetAmount(currency.Type)}{name}");
+        SetIcon(currency.Icon);
+
+        base.OnUpdate();
 
         Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
         if (GetConfigValue<bool>("ApplyToWidgetText")) {
@@ -193,9 +158,9 @@ internal sealed partial class CurrenciesWidget(
         _updateTimer.Dispose();
     }
 
-    private void UpdateMenuItems()
+    private void UpdateMenuItems(bool force = false)
     {
-        if (!Popup.IsOpen) return;
+        if (!force && !Popup.IsOpen) return;
 
         byte gcId = Player.GrandCompanyId;
 
@@ -209,6 +174,11 @@ internal sealed partial class CurrenciesWidget(
             if (currency.Type == CurrencyType.Maelstrom && gcId != 1) continue;
             if (currency.Type == CurrencyType.TwinAdder && gcId != 2) continue;
             if (currency.Type == CurrencyType.ImmortalFlames && gcId != 3) continue;
+
+            string id = $"Currency_{currency.Id}";
+
+            Popup.SetButtonAltLabel(id, GetAmount(currency.Type));
+            Popup.SetButtonVisibility(id, GetConfigValue<bool>($"EnabledCurrency_{currency.Id}"));
 
             Una.Drawing.Color cappedColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
             Una.Drawing.Color thresholdColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdColor"), 16));

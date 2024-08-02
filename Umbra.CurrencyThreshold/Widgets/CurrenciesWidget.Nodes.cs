@@ -16,10 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Dalamud.Utility;
-using Lumina.Data.Parsing;
 using Lumina.Excel.GeneratedSheets;
 using Umbra.Common;
 
@@ -58,9 +56,6 @@ internal partial class CurrenciesWidget
             if (currency.Type == CurrencyType.TwinAdder && gcId != 2) continue;
             if (currency.Type == CurrencyType.ImmortalFlames && gcId != 3) continue;
 
-            // currency.Cap / GetActualAmount(currency.Type) > 0.75 ? new(0xFF474DFF) : new("Widget.PopupMenuText");
-            //  - COLOR is aBGR
-
             Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
             if (currency.Type == CurrencyType.Maelstrom || currency.Type == CurrencyType.TwinAdder || currency.Type == CurrencyType.ImmortalFlames) {
                 if (GetActualAmount(currency.Type) >= 90000) setTextColor = cappedColor;
@@ -83,6 +78,8 @@ internal partial class CurrenciesWidget
                     );
                 }
             );
+
+            Popup.SetButtonVisibility($"Currency_{currency.Id}", GetConfigValue<bool>($"EnabledCurrency_{currency.Id}"));
         }
 
         // Add groups.
@@ -146,6 +143,8 @@ internal partial class CurrenciesWidget
                     );
                 }
             );
+
+            Popup.SetButtonVisibility($"Currency_{currency.Id}", GetConfigValue<bool>($"EnabledCurrency_{currency.Id}"));
         }
     }
 
