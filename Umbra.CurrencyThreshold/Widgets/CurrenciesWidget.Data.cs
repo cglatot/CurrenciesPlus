@@ -101,18 +101,17 @@ internal partial class CurrenciesWidget
         };
     }
 
-    private string GetCustomAmount(uint id)
+    private string GetCustomAmount(uint id, bool showCap)
     {
         if (false == CustomCurrencies.ContainsKey(id)) return "";
 
-        return CustomCurrencies[id].Cap > 1 && GetConfigValue<bool>("ShowCap")
+        return CustomCurrencies[id].Cap > 1 && showCap
             ? $"{FormatNumber(Player.GetItemCount(id))} / {FormatNumber((int)CustomCurrencies[id].Cap)}"
             : $"{FormatNumber(Player.GetItemCount(id))}";
     }
 
-    private unsafe string GetAmount(CurrencyType type)
+    private unsafe string GetAmount(CurrencyType type, bool showCap)
     {
-        var showCap = GetConfigValue<bool>("ShowCap");
         var showWeeklyProgress = GetConfigValue<bool>("ShowWeeklyProgress");
 
         switch (type) {
@@ -139,7 +138,7 @@ internal partial class CurrenciesWidget
 
                 if (showCap) return $"{amt} / {cap} ({weeklyCount} / {weeklyLimit})";
                 else if (showWeeklyProgress && weeklyCount < weeklyLimit) return $"{amt} ({weeklyCount})";
-                else return showCap ? $"{amt} / {cap} ({weeklyCount} / {weeklyLimit})" : $"{amt}";
+                else return $"{amt}";
             }
             default: {
                 uint cap = Currencies[type].Cap;
@@ -248,7 +247,7 @@ internal partial class CurrenciesWidget
         if (CustomCurrencies.Count > 0) {
             foreach (uint id in CustomCurrencies.Keys) {
                 if (Popup.HasButton($"CustomCurrency_{id}")) {
-                    Popup.SetButtonAltLabel($"CustomCurrency_{id}", GetCustomAmount(id));
+                    Popup.SetButtonAltLabel($"CustomCurrency_{id}", GetCustomAmount(id, GetConfigValue<bool>("ShowCap")));
                 }
             }
         }

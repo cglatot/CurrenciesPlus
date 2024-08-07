@@ -67,7 +67,7 @@ internal partial class CurrenciesWidget
                 $"Currency_{currency.Id}",
                 currency.Name,
                 iconId: currency.Icon,
-                altText: GetAmount(currency.Type),
+                altText: GetAmount(currency.Type, GetConfigValue<bool>("ShowCap")),
                 textColor: setTextColor,
                 onClick: () => {
                     var type = currency.Type.ToString();
@@ -131,7 +131,7 @@ internal partial class CurrenciesWidget
                 $"Currency_{currency.Id}",
                 currency.Name,
                 iconId: currency.Icon,
-                altText: GetAmount(currency.Type),
+                altText: GetAmount(currency.Type, GetConfigValue<bool>("ShowCap")),
                 textColor: setTextColor,
                 groupId: $"Group_{currency.GroupId}",
                 onClick: () => {
@@ -157,7 +157,7 @@ internal partial class CurrenciesWidget
                 $"CustomCurrency_{currency.Id}",
                 iconId: currency.Icon,
                 label: $"{currency.Name}",
-                altText: GetCustomAmount(currency.Id),
+                altText: GetCustomAmount(currency.Id, GetConfigValue<bool>("ShowCap")),
                 groupId: "Group_5",
                 onClick: () => {
                     var type  = currency.Id.ToString();

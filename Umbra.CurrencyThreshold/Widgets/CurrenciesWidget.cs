@@ -79,7 +79,7 @@ internal sealed partial class CurrenciesWidget(
         if (uint.TryParse(GetConfigValue<string>("TrackedCurrency"), out uint customId)) {
             if (CustomCurrencies.TryGetValue(customId, out Currency? customCurrency)) {
                 string customName = GetConfigValue<bool>("ShowName") ? $" {customCurrency.Name}" : "";
-                SetLabel($"{GetCustomAmount(customCurrency.Id)}{customName}");
+                SetLabel($"{GetCustomAmount(customCurrency.Id, GetConfigValue<bool>("ShowCapOnWidget"))}{customName}");
                 SetIcon(customCurrency.Icon);
                 base.OnUpdate();
                 return;
@@ -97,7 +97,7 @@ internal sealed partial class CurrenciesWidget(
         }
 
         string name = GetConfigValue<bool>("ShowName") ? $" {currency.Name}" : "";
-        SetLabel($"{GetAmount(currency.Type)}{name}");
+        SetLabel($"{GetAmount(currency.Type, GetConfigValue<bool>("ShowCapOnWidget"))}{name}");
         SetIcon(currency.Icon);
 
         base.OnUpdate();
@@ -177,7 +177,7 @@ internal sealed partial class CurrenciesWidget(
 
             string id = $"Currency_{currency.Id}";
 
-            Popup.SetButtonAltLabel(id, GetAmount(currency.Type));
+            Popup.SetButtonAltLabel(id, GetAmount(currency.Type, GetConfigValue<bool>("ShowCap")));
             Popup.SetButtonVisibility(id, GetConfigValue<bool>($"EnabledCurrency_{currency.Id}"));
 
             Una.Drawing.Color cappedColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
@@ -225,7 +225,7 @@ internal sealed partial class CurrenciesWidget(
                 else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("BicolorThreshold")) setTextColor = thresholdColor;
             }
 
-            Popup.SetButtonAltLabel($"Currency_{currency.Id}", GetAmount(currency.Type));
+            Popup.SetButtonAltLabel($"Currency_{currency.Id}", GetAmount(currency.Type, GetConfigValue<bool>("ShowCap")));
             Popup.SetNewColor($"Currency_{currency.Id}", setTextColor);
         }
     }
