@@ -1,9 +1,12 @@
-# Currency Widget - Thresholds
+# Currencies+ (Formerly Currencies Threshold)
 
 Modified Currency widget, with a configurable warning threshold that turns the text orange when above it. Text turns red when currency is capped.
 
 ![image](https://github.com/user-attachments/assets/d9111e08-2c4b-4922-b931-1b4c6056981b)
 
+As of version 1.3.0, adds an option for Currency Alerts. Changes the default behaviour to instead show the icons of any currencies that exceed your set thresholds.
+
+![image](https://github.com/user-attachments/assets/bfca11a1-b813-49c0-b4e1-e3802130d838)
 
 ## Installation
 
