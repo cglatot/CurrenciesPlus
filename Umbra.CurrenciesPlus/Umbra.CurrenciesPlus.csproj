@@ -35,10 +35,10 @@
     <PropertyGroup>
         <Authors>cglatot</Authors>
         <Company>NullCorp</Company>
-        <Version>1.2.1</Version>
-        <Description>Currency widget with Threshold Setting</Description>
+        <Version>1.3.0</Version>
+        <Description>Currencies widget with additional features</Description>
         <Copyright>(C)2024</Copyright>
-        <PackageProjectUrl>https://github.com/cglatot/CurrencyThreshold</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/cglatot/CurrenciesPlus</PackageProjectUrl>
         <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
