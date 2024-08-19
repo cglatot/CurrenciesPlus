@@ -18,7 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.Timers;
 using FFXIVClientStructs.FFXIV.Client.UI;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Umbra.Common;
+using Una.Drawing;
 
 namespace Umbra.Widgets;
 
@@ -31,6 +33,8 @@ internal sealed partial class CurrenciesWidget(
 {
     private readonly Timer _updateTimer           = new(1000);
     private          byte  _currentGrandCompanyId = 0;
+
+    private readonly Dictionary<uint, Node> _alerts = [];
 
     /// <inheritdoc/>
     protected override void Initialize()
@@ -45,6 +49,8 @@ internal sealed partial class CurrenciesWidget(
 
         Node.OnClick      += _ => UpdateMenuItems(true);
         Node.OnRightClick += _ => OpenCurrenciesWindow();
+
+        CreateAlertNodes();
     }
 
     public override string GetInstanceName()
@@ -146,23 +152,46 @@ internal sealed partial class CurrenciesWidget(
                 else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("BicolorThreshold")) setTextColor = thresholdColor;
             }
         }
-
-        // bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
-        // if (alertMode && Node.QuerySelector("#DynamicIcon")! == null){
-        //     setTextColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
-        //     Node.QuerySelector(".toolbar-widget-default")!.AppendChild(new() {
-        //         Id          = "DynamicIcon",
-        //         ClassList   = ["icon"],
-        //         InheritTags = true,
-        //         Style = new() {
-        //             Margin    = new() { Left = -2 },
-        //             IsVisible = true,
-        //             IconId = 51
-        //         }
-        //     });
-        // }
-
         Node.QuerySelector("#Label")!.Style.Color = setTextColor;
+
+        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
+        if (alertMode) {
+            var iconSize = GetConfigValue<int>("IconSize") == 0 ? 24 : GetConfigValue<int>("IconSize");
+            var iconGray = GetConfigValue<bool>("DesaturateIcon");
+
+            foreach (Node nodeStyle in _alerts.Values) {
+                nodeStyle.Style.Size = new(iconSize, iconSize);
+                nodeStyle.Style.ImageGrayscale = iconGray;
+                nodeStyle.Style.IsVisible = true;
+            }
+        }
+        if (alertMode && _alerts.TryGetValue(currency.Id, out Node? nodeAlert)) {
+            if (currency.Type == CurrencyType.Maelstrom || currency.Type == CurrencyType.TwinAdder || currency.Type == CurrencyType.ImmortalFlames) {
+
+            }
+            else if (currency.GroupId == 1) {
+                nodeAlert.Style.IsVisible = true;
+                // if (GetActualAmount(currency.Type) >= GetConfigValue<int>("HuntThreshold")) nodeAlert.Style.IsVisible = true;
+                // else nodeAlert.Style.IsVisible = false;
+            }
+            else if (currency.GroupId == 2) {
+
+            }
+            else if (currency.GroupId == 3) {
+
+            }
+            else if (currency.GroupId == 4) {
+                if (currency.Type == CurrencyType.SkyBuildersScrips) {
+
+                }
+                else {
+
+                }
+            }
+            else if (currency.GroupId == 5) {
+
+            }
+        }
 
         base.OnUpdate();
     }
@@ -251,5 +280,27 @@ internal sealed partial class CurrenciesWidget(
         UIModule* uiModule = UIModule.Instance();
         if (uiModule == null) return;
         uiModule->ExecuteMainCommand(66);
+    }
+
+    private void CreateAlertNodes() {
+        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
+        if (alertMode) {
+            foreach (var currency in Currencies.Values) {
+                Node node = new() {
+                    ClassList = ["alert-node-entry"],
+                    InheritTags = true,
+                    Style = new() {
+                        Size = new(24, 24),
+                        Margin = new(0),
+                        Padding = new(0),
+                        IconId = currency.Icon,
+                        IsVisible = false
+                    }
+                };
+
+                _alerts.Add(currency.Id, node);
+                Node.AppendChild(node);
+            }
+        }
     }
 }
