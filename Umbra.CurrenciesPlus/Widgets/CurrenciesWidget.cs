@@ -16,13 +16,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Timers;
 using FFXIVClientStructs.FFXIV.Client.UI;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Umbra.Common;
+using Una.Drawing;
 
 namespace Umbra.Widgets;
 
-[ToolbarWidget("CurrenciesThreshold", "Currencies Threshold", "Same as the Currencies Widget, with threshold settings")]
+[ToolbarWidget("Currencies+", "Currencies+", "Same as the Currencies Widget, with some extra features")]
 internal sealed partial class CurrenciesWidget(
     WidgetInfo                  info,
     string?                     guid         = null,
@@ -31,6 +34,8 @@ internal sealed partial class CurrenciesWidget(
 {
     private readonly Timer _updateTimer           = new(1000);
     private          byte  _currentGrandCompanyId = 0;
+
+    private readonly Dictionary<uint, Node> _alerts = [];
 
     /// <inheritdoc/>
     protected override void Initialize()
@@ -45,24 +50,26 @@ internal sealed partial class CurrenciesWidget(
 
         Node.OnClick      += _ => UpdateMenuItems(true);
         Node.OnRightClick += _ => OpenCurrenciesWindow();
+
+        CreateAlertNodes();
     }
 
     public override string GetInstanceName()
     {
         if (uint.TryParse(GetConfigValue<string>("TrackedCurrency"), out uint customId)) {
             if (CustomCurrencies.TryGetValue(customId, out Currency? customCurrency)) {
-                return $"{I18N.Translate("Widget.Currencies.Name")} - {customCurrency.Name}";
+                return $"{"Currencies+"} - {customCurrency.Name}";
             }
 
             return string.IsNullOrEmpty(GetConfigValue<string>("CustomLabel"))
-                ? I18N.Translate("Widget.Currencies.Name")
+                ? "Currencies+"
                 : GetConfigValue<string>("CustomLabel");
         }
 
         return GetConfigValue<string>("TrackedCurrency") != ""
-            ? $"{I18N.Translate("Widget.Currencies.Name")} - {Currencies[Enum.Parse<CurrencyType>(GetConfigValue<string>("TrackedCurrency"))].Name}"
+            ? $"{"Currencies+"} - {Currencies[Enum.Parse<CurrencyType>(GetConfigValue<string>("TrackedCurrency"))].Name}"
             : string.IsNullOrEmpty(GetConfigValue<string>("CustomLabel"))
-                ? I18N.Translate("Widget.Currencies.Name")
+                ? "Currencies+"
                 : GetConfigValue<string>("CustomLabel");
     }
 
@@ -71,8 +78,61 @@ internal sealed partial class CurrenciesWidget(
     {
         Popup.IsDisabled        = !GetConfigValue<bool>("EnableMouseInteraction");
         Popup.UseGrayscaleIcons = GetConfigValue<bool>("DesaturateIcons");
+        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
 
         UpdateCustomIdList();
+
+        if (alertMode) {
+            SetLabel("");
+            SetIcon(null);
+            var iconSize = GetConfigValue<int>("IconSize") == 0 ? 24 : GetConfigValue<int>("IconSize");
+            var iconGray = GetConfigValue<bool>("DesaturateIcon");
+
+            foreach (var currencyTemp in Currencies.Values) {
+                if (_alerts.TryGetValue(currencyTemp.Id, out Node? nodeAlert)) {
+                    nodeAlert.Style.Size = new(iconSize, iconSize);
+                    nodeAlert.Style.ImageGrayscale = iconGray;
+
+                    if (currencyTemp.Type == CurrencyType.Maelstrom || currencyTemp.Type == CurrencyType.TwinAdder || currencyTemp.Type == CurrencyType.ImmortalFlames) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("GCSealThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 1) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("HuntThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 2) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("TomeThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 3) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("PvPThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 4) {
+                        if (currencyTemp.Type == CurrencyType.SkyBuildersScrips) {
+                            if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("SkybuilderThreshold")) nodeAlert.Style.IsVisible = true;
+                            else nodeAlert.Style.IsVisible = false;
+                        }
+                        else {
+                            if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("CraftGatherThreshold")) nodeAlert.Style.IsVisible = true;
+                            else nodeAlert.Style.IsVisible = false;
+                        }
+                    }
+                    else if (currencyTemp.GroupId == 5) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("BicolorThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                }
+            }
+            base.OnUpdate();
+            return;
+        }
+        else {
+            foreach (Node alertNodeToHide in _alerts.Values) {
+                alertNodeToHide.Style.IsVisible = false;
+            }
+        }
 
         var trackedCurrencyId = GetConfigValue<string>("TrackedCurrency");
 
@@ -88,7 +148,7 @@ internal sealed partial class CurrenciesWidget(
 
         if (!Enum.TryParse(trackedCurrencyId, out CurrencyType currencyType) || currencyType == 0 || !Currencies.TryGetValue(currencyType, out Currency? currency)) {
             string customLabel = GetConfigValue<string>("CustomLabel");
-            string label       = I18N.Translate("Widget.Currencies.Name");
+            string label       = "Currencies+";
 
             SetLabel(string.IsNullOrEmpty(customLabel) ? label : customLabel);
             SetIcon(null);
@@ -99,8 +159,6 @@ internal sealed partial class CurrenciesWidget(
         string name = GetConfigValue<bool>("ShowName") ? $" {currency.Name}" : "";
         SetLabel($"{GetAmount(currency.Type, GetConfigValue<bool>("ShowCapOnWidget"))}{name}");
         SetIcon(currency.Icon);
-
-        base.OnUpdate();
 
         Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
         if (GetConfigValue<bool>("ApplyToWidgetText")) {
@@ -149,6 +207,8 @@ internal sealed partial class CurrenciesWidget(
             }
         }
         Node.QuerySelector("#Label")!.Style.Color = setTextColor;
+
+        base.OnUpdate();
     }
 
     /// <inheritdoc/>
@@ -235,5 +295,33 @@ internal sealed partial class CurrenciesWidget(
         UIModule* uiModule = UIModule.Instance();
         if (uiModule == null) return;
         uiModule->ExecuteMainCommand(66);
+    }
+
+    private void CreateAlertNodes() {
+        Node nodeWrapper = new() {
+            ClassList = ["alert-node-wrapper"],
+            InheritTags = true,
+            Style = new() {
+                Size = new (0, SafeHeight)
+            }
+        };
+        foreach (var currency in Currencies.Values) {
+            Node node = new() {
+                ClassList = ["alert-node-entry"],
+                InheritTags = true,
+                Style = new() {
+                    Size = new(24, 24),
+                    Margin = new(0) {Right = 5},
+                    Padding = new(0),
+                    IconId = currency.Icon,
+                    Anchor = Anchor.MiddleLeft,
+                    IsVisible = false
+                }
+            };
+
+            _alerts.Add(currency.Id, node);
+            nodeWrapper.AppendChild(node);
+        }
+        Node.AppendChild(nodeWrapper);
     }
 }
