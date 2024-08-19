@@ -81,7 +81,7 @@ internal partial class CurrenciesWidget
             new BooleanWidgetConfigVariable(
                 "CurrencyAlertMode",
                 "Currency Alert Mode",
-                "YOU MUST RESTART UMBRA WHEN YOU CHANGE THIS. This will change the behaviour of the main widget. It will show all the currencies that have passed the set thresholds. Recommended to also change 'Icon Only'.",
+                "This will change the behaviour of the main widget. It will show the icons for all currencies that have passed the set thresholds.",
                 false
             ) { Category = "Threshold Settings" },
             new BooleanWidgetConfigVariable(

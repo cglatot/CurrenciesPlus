@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Timers;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -77,8 +78,61 @@ internal sealed partial class CurrenciesWidget(
     {
         Popup.IsDisabled        = !GetConfigValue<bool>("EnableMouseInteraction");
         Popup.UseGrayscaleIcons = GetConfigValue<bool>("DesaturateIcons");
+        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
 
         UpdateCustomIdList();
+
+        if (alertMode) {
+            SetLabel("");
+            SetIcon(null);
+            var iconSize = GetConfigValue<int>("IconSize") == 0 ? 24 : GetConfigValue<int>("IconSize");
+            var iconGray = GetConfigValue<bool>("DesaturateIcon");
+
+            foreach (var currencyTemp in Currencies.Values) {
+                if (_alerts.TryGetValue(currencyTemp.Id, out Node? nodeAlert)) {
+                    nodeAlert.Style.Size = new(iconSize, iconSize);
+                    nodeAlert.Style.ImageGrayscale = iconGray;
+
+                    if (currencyTemp.Type == CurrencyType.Maelstrom || currencyTemp.Type == CurrencyType.TwinAdder || currencyTemp.Type == CurrencyType.ImmortalFlames) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("GCSealThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 1) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("HuntThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 2) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("TomeThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 3) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("PvPThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                    else if (currencyTemp.GroupId == 4) {
+                        if (currencyTemp.Type == CurrencyType.SkyBuildersScrips) {
+                            if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("SkybuilderThreshold")) nodeAlert.Style.IsVisible = true;
+                            else nodeAlert.Style.IsVisible = false;
+                        }
+                        else {
+                            if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("CraftGatherThreshold")) nodeAlert.Style.IsVisible = true;
+                            else nodeAlert.Style.IsVisible = false;
+                        }
+                    }
+                    else if (currencyTemp.GroupId == 5) {
+                        if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("BicolorThreshold")) nodeAlert.Style.IsVisible = true;
+                        else nodeAlert.Style.IsVisible = false;
+                    }
+                }
+            }
+            base.OnUpdate();
+            return;
+        }
+        else {
+            foreach (Node alertNodeToHide in _alerts.Values) {
+                alertNodeToHide.Style.IsVisible = false;
+            }
+        }
 
         var trackedCurrencyId = GetConfigValue<string>("TrackedCurrency");
 
@@ -153,45 +207,6 @@ internal sealed partial class CurrenciesWidget(
             }
         }
         Node.QuerySelector("#Label")!.Style.Color = setTextColor;
-
-        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
-        if (alertMode) {
-            var iconSize = GetConfigValue<int>("IconSize") == 0 ? 24 : GetConfigValue<int>("IconSize");
-            var iconGray = GetConfigValue<bool>("DesaturateIcon");
-
-            foreach (Node nodeStyle in _alerts.Values) {
-                nodeStyle.Style.Size = new(iconSize, iconSize);
-                nodeStyle.Style.ImageGrayscale = iconGray;
-                nodeStyle.Style.IsVisible = true;
-            }
-        }
-        if (alertMode && _alerts.TryGetValue(currency.Id, out Node? nodeAlert)) {
-            if (currency.Type == CurrencyType.Maelstrom || currency.Type == CurrencyType.TwinAdder || currency.Type == CurrencyType.ImmortalFlames) {
-
-            }
-            else if (currency.GroupId == 1) {
-                nodeAlert.Style.IsVisible = true;
-                // if (GetActualAmount(currency.Type) >= GetConfigValue<int>("HuntThreshold")) nodeAlert.Style.IsVisible = true;
-                // else nodeAlert.Style.IsVisible = false;
-            }
-            else if (currency.GroupId == 2) {
-
-            }
-            else if (currency.GroupId == 3) {
-
-            }
-            else if (currency.GroupId == 4) {
-                if (currency.Type == CurrencyType.SkyBuildersScrips) {
-
-                }
-                else {
-
-                }
-            }
-            else if (currency.GroupId == 5) {
-
-            }
-        }
 
         base.OnUpdate();
     }
@@ -283,24 +298,30 @@ internal sealed partial class CurrenciesWidget(
     }
 
     private void CreateAlertNodes() {
-        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
-        if (alertMode) {
-            foreach (var currency in Currencies.Values) {
-                Node node = new() {
-                    ClassList = ["alert-node-entry"],
-                    InheritTags = true,
-                    Style = new() {
-                        Size = new(24, 24),
-                        Margin = new(0),
-                        Padding = new(0),
-                        IconId = currency.Icon,
-                        IsVisible = false
-                    }
-                };
-
-                _alerts.Add(currency.Id, node);
-                Node.AppendChild(node);
+        Node nodeWrapper = new() {
+            ClassList = ["alert-node-wrapper"],
+            InheritTags = true,
+            Style = new() {
+                Size = new (0, SafeHeight)
             }
+        };
+        foreach (var currency in Currencies.Values) {
+            Node node = new() {
+                ClassList = ["alert-node-entry"],
+                InheritTags = true,
+                Style = new() {
+                    Size = new(24, 24),
+                    Margin = new(0) {Right = 5},
+                    Padding = new(0),
+                    IconId = currency.Icon,
+                    Anchor = Anchor.MiddleLeft,
+                    IsVisible = false
+                }
+            };
+
+            _alerts.Add(currency.Id, node);
+            nodeWrapper.AppendChild(node);
         }
+        Node.AppendChild(nodeWrapper);
     }
 }
