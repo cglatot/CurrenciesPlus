@@ -100,7 +100,7 @@ internal sealed partial class CurrenciesWidget(
         SetLabel($"{GetAmount(currency.Type, GetConfigValue<bool>("ShowCapOnWidget"))}{name}");
         SetIcon(currency.Icon);
 
-        base.OnUpdate();
+        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
 
         Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
         if (GetConfigValue<bool>("ApplyToWidgetText")) {
@@ -149,6 +149,9 @@ internal sealed partial class CurrenciesWidget(
             }
         }
         Node.QuerySelector("#Label")!.Style.Color = setTextColor;
+
+        base.OnUpdate();
+
     }
 
     /// <inheritdoc/>

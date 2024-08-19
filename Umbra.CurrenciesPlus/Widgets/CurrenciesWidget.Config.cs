@@ -79,6 +79,12 @@ internal partial class CurrenciesWidget
             ..DefaultToolbarWidgetConfigVariables,
             ..SingleLabelTextOffsetVariables,
             new BooleanWidgetConfigVariable(
+                "CurrencyAlertMode",
+                "Currency Alert Mode",
+                "This will change the behaviour of the main widget. It will show all the currencies that have passed the set thresholds. Recommended to also change 'Icon Only'.",
+                true
+            ) { Category = "Threshold Settings" },
+            new BooleanWidgetConfigVariable(
                 "ApplyToWidgetText",
                 "Also Apply Colours to Toolbar Text",
                 "Check this to also apply the colours to the widget text in the toolbar. Uncheck to only colourise the text in the popup menu.",
