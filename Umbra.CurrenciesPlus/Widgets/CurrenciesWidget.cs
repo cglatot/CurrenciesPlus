@@ -100,8 +100,6 @@ internal sealed partial class CurrenciesWidget(
         SetLabel($"{GetAmount(currency.Type, GetConfigValue<bool>("ShowCapOnWidget"))}{name}");
         SetIcon(currency.Icon);
 
-        bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
-
         Una.Drawing.Color setTextColor = new("Widget.PopupMenuText");
         if (GetConfigValue<bool>("ApplyToWidgetText")) {
             Una.Drawing.Color cappedColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
@@ -148,10 +146,25 @@ internal sealed partial class CurrenciesWidget(
                 else if (GetActualAmount(currency.Type) >= GetConfigValue<int>("BicolorThreshold")) setTextColor = thresholdColor;
             }
         }
+
+        // bool alertMode = GetConfigValue<bool>("CurrencyAlertMode");
+        // if (alertMode && Node.QuerySelector("#DynamicIcon")! == null){
+        //     setTextColor = new(Convert.ToUInt32(GetConfigValue<string>("ThresholdMaxColor"), 16));
+        //     Node.QuerySelector(".toolbar-widget-default")!.AppendChild(new() {
+        //         Id          = "DynamicIcon",
+        //         ClassList   = ["icon"],
+        //         InheritTags = true,
+        //         Style = new() {
+        //             Margin    = new() { Left = -2 },
+        //             IsVisible = true,
+        //             IconId = 51
+        //         }
+        //     });
+        // }
+
         Node.QuerySelector("#Label")!.Style.Color = setTextColor;
 
         base.OnUpdate();
-
     }
 
     /// <inheritdoc/>

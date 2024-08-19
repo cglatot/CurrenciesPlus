@@ -82,7 +82,7 @@ internal partial class CurrenciesWidget
                 "CurrencyAlertMode",
                 "Currency Alert Mode",
                 "This will change the behaviour of the main widget. It will show all the currencies that have passed the set thresholds. Recommended to also change 'Icon Only'.",
-                true
+                false
             ) { Category = "Threshold Settings" },
             new BooleanWidgetConfigVariable(
                 "ApplyToWidgetText",
