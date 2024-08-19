@@ -10,7 +10,7 @@ As of version 1.3.0, adds an option for Currency Alerts. Changes the default beh
 
 ## Installation
 
-The plugin can be installed by selecting the .dll file from [Releases](https://github.com/cglatot/CurrencyThreshold/releases/latest) in Umbra's "Add Plugin" settings. The widget is named "Currencies Threshold" and must then be added to a column in your Toolbar Widgets settings.
+The plugin can be installed by selecting the .dll file from [Releases](https://github.com/cglatot/CurrenciesPlus/releases/latest) in Umbra's "Add Plugin" settings. The widget is named "Currencies Threshold" and must then be added to a column in your Toolbar Widgets settings.
 
 ## Disclaimer
 
