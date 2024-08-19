@@ -22,7 +22,7 @@ using Umbra.Common;
 
 namespace Umbra.Widgets;
 
-[ToolbarWidget("CurrenciesThreshold", "Currencies Threshold", "Same as the Currencies Widget, with threshold settings")]
+[ToolbarWidget("Currencies+", "Currencies+", "Same as the Currencies Widget, with some extra features")]
 internal sealed partial class CurrenciesWidget(
     WidgetInfo                  info,
     string?                     guid         = null,
@@ -51,18 +51,18 @@ internal sealed partial class CurrenciesWidget(
     {
         if (uint.TryParse(GetConfigValue<string>("TrackedCurrency"), out uint customId)) {
             if (CustomCurrencies.TryGetValue(customId, out Currency? customCurrency)) {
-                return $"{I18N.Translate("Widget.Currencies.Name")} - {customCurrency.Name}";
+                return $"{"Currencies+"} - {customCurrency.Name}";
             }
 
             return string.IsNullOrEmpty(GetConfigValue<string>("CustomLabel"))
-                ? I18N.Translate("Widget.Currencies.Name")
+                ? "Currencies+"
                 : GetConfigValue<string>("CustomLabel");
         }
 
         return GetConfigValue<string>("TrackedCurrency") != ""
-            ? $"{I18N.Translate("Widget.Currencies.Name")} - {Currencies[Enum.Parse<CurrencyType>(GetConfigValue<string>("TrackedCurrency"))].Name}"
+            ? $"{"Currencies+"} - {Currencies[Enum.Parse<CurrencyType>(GetConfigValue<string>("TrackedCurrency"))].Name}"
             : string.IsNullOrEmpty(GetConfigValue<string>("CustomLabel"))
-                ? I18N.Translate("Widget.Currencies.Name")
+                ? "Currencies+"
                 : GetConfigValue<string>("CustomLabel");
     }
 
@@ -88,7 +88,7 @@ internal sealed partial class CurrenciesWidget(
 
         if (!Enum.TryParse(trackedCurrencyId, out CurrencyType currencyType) || currencyType == 0 || !Currencies.TryGetValue(currencyType, out Currency? currency)) {
             string customLabel = GetConfigValue<string>("CustomLabel");
-            string label       = I18N.Translate("Widget.Currencies.Name");
+            string label       = "Currencies+";
 
             SetLabel(string.IsNullOrEmpty(customLabel) ? label : customLabel);
             SetIcon(null);
