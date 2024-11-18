@@ -203,6 +203,9 @@ internal partial class CurrenciesWidget
             variables.Add(new BooleanWidgetConfigVariable($"EnabledCurrency_{currency.Id}", currency.Name, null, true) {
                 Category = I18N.Translate("Widget.Currencies.Config.EnabledCurrencyGroup")
             });
+            variables.Add(new BooleanWidgetConfigVariable($"EnabledCurrencyAlert_{currency.Id}", currency.Name, null, true) {
+                Category = "Visible Currency Alerts (Toolbar)"
+            });
         }
 
         return variables;

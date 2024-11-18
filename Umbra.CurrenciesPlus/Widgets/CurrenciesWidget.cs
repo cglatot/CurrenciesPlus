@@ -123,6 +123,9 @@ internal sealed partial class CurrenciesWidget(
                         if (GetActualAmount(currencyTemp.Type) >= GetConfigValue<int>("BicolorThreshold")) nodeAlert.Style.IsVisible = true;
                         else nodeAlert.Style.IsVisible = false;
                     }
+                    if (GetConfigValue<bool>($"EnabledCurrencyAlert_{currencyTemp.Id}") == false) {
+                        nodeAlert.Style.IsVisible = false;
+                    }
                 }
             }
             base.OnUpdate();
