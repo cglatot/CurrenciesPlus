@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Utility;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Umbra.Common;
 
 namespace Umbra.Widgets;
